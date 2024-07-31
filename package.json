@@ -7,6 +7,7 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
+    "dotenv": "^16.4.5",
     "next": "latest",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
