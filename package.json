@@ -4,6 +4,8 @@
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
+        "test": "jest",
+        "test-watch": "jest --watch-all",
         "test:e2e": "playwright test",
         "mock-server": "ts-node-dev --respawn --transpile-only mock-server/server.ts",
         "start:both": "concurrently \"npm run dev\" \"npm run mock-server\""
@@ -20,10 +22,36 @@
     },
     "devDependencies": {
         "@playwright/test": "^1.40.1",
+        "@testing-library/jest-dom": "^6.4.8",
+        "@testing-library/react": "^16.0.0",
         "@types/cors": "^2.8.17",
+        "@types/jest": "^29.5.12",
         "@types/node": "^20.10.4",
         "@types/react": "18.2.45",
         "concurrently": "^8.2.2",
+        "identity-obj-proxy": "^3.0.0",
+        "jest": "^29.7.0",
+        "jest-environment-jsdom": "^29.7.0",
+        "ts-jest": "^29.2.3",
         "typescript": "5.3.3"
+    },
+    "jest": {
+        "preset": "ts-jest",
+        "testEnvironment": "jsdom",
+        "moduleNameMapper": {
+            "\\.(css|scss|sass)$": "identity-obj-proxy",
+            "\\.(jpg|jpeg|png|gif|webp|svg)$": "<rootDir>/__mocks__/fileMock.js"
+        },
+        "transform": {
+            "^.+\\.(ts|tsx)$": [
+                "ts-jest",
+                {
+                    "tsconfig": "tsconfig.jest.json"
+                }
+            ]
+        },
+        "testPathIgnorePatterns": [
+            "<rootDir>/e2e/"
+        ]
     }
 }

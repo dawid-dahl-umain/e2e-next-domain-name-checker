@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test"
 
 test.describe("/", () => {
-    test.describe.only("Check Domain Availability", () => {
+    test.describe("Check Domain Availability", () => {
         test("should check and display domain availability results", async ({
             page
         }) => {

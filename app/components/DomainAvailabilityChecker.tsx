@@ -1,5 +1,6 @@
 "use client"
 
+import React from "react"
 import TrendyLogo from "../../public/trendy-logo.png"
 
 const checkDomainAvailability = async (domainName: string) => {
