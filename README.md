@@ -2,26 +2,18 @@
 
 This example shows how to configure Playwright to work with Next.js.
 
-## Deploy your own
+## Run Playwright E2E Tests
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example) or preview live with [StackBlitz](https://stackblitz.com/github/vercel/next.js/tree/canary/examples/with-playwright)
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-playwright&project-name=with-playwright&repository-name=with-playwright)
-
-## How to use
-
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example:
+This runs the dev server and the mock API server, then executing the e2e tests.
 
 ```bash
-npx create-next-app --example with-playwright with-playwright-app
+npm run test:e2e
 ```
 
-```bash
-yarn create next-app --example with-playwright with-playwright-app
-```
+To run the tests (and the dev and mock API server) continuously, go into the VSCode Playwright Test Runner, then click the "Continuous Run" eye symbol. Then, click the "Run Tests" button.
 
-```bash
-pnpm create next-app --example with-playwright with-playwright-app
-```
+Now, the tests will run on every save in a e2e .spec file.
 
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+If you want to stop the servers and the tests, click the "Refresh Tests" button.
+
+> If it for some reason doesn't run on every save, click the "Stop Continuous Run" (eye) button and then click it again. Then make a change in a .spec file again and it should work.
