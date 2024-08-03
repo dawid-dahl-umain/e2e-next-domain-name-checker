@@ -2,6 +2,6 @@
     "extends": "./tsconfig.json",
     "compilerOptions": {
         "jsx": "react", // Ensure JSX is handled correctly by TypeScript for Jest
-        "module": "commonjs" // CommonJS modules work out of the box with Jest
+        "module": "commonjs" // CommonJS modules work out of the box with Jest,
     }
 }
