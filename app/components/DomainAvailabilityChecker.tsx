@@ -12,6 +12,12 @@ const checkDomainAvailability = async (domainName: string) => {
 }
 
 export const DomainAvailabilityChecker = () => {
+    const [domainName, setDomainName] = React.useState<string>("")
+
+    const handleDomainNameChange = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => setDomainName(event.target.value)
+
     return (
         <div data-testid="main" className="domain-availability-container">
             <img src={TrendyLogo.src} alt="Logo" className="logo" />
@@ -22,6 +28,8 @@ export const DomainAvailabilityChecker = () => {
                     type="text"
                     id="domainNameInput"
                     className="domain-input"
+                    value={domainName}
+                    onChange={handleDomainNameChange}
                 />
                 <button className="check-button">Check Availability</button>
             </div>
@@ -30,6 +38,7 @@ export const DomainAvailabilityChecker = () => {
                 id="analyses-result"
                 className="results-list"
             ></div>
+            <p>The searched domain is: {domainName}</p>
         </div>
     )
 }
