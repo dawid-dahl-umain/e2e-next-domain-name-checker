@@ -1,39 +1,66 @@
 import React from "react"
-import { fireEvent, render, screen } from "@testing-library/react"
+import { fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { DomainAvailabilityChecker } from "./DomainAvailabilityChecker"
 
 describe("DomainAvailabilityChecker", () => {
-    it("should display domain name when specified by user", () => {
-        render(<DomainAvailabilityChecker />)
-
-        const inputField = screen.getByRole("textbox")
-
-        fireEvent.change(inputField, { target: { value: "www.tddrocks.com" } })
-
-        const button = screen.getByRole("button")
-
-        fireEvent.click(button)
-
-        expect(
-            screen.getByText("The searched domain is: www.tddrocks.com")
-        ).toBeInTheDocument()
+    beforeEach(() => {
+        fetchMock.resetMocks()
     })
 
-    it("should display another domain name when specified by user", () => {
-        render(<DomainAvailabilityChecker />)
-
-        const inputField = screen.getByRole("textbox")
-
-        fireEvent.change(inputField, {
-            target: { value: "www.lifetastesgreat.com" }
-        })
-
-        const button = screen.getByRole("button")
-
-        fireEvent.click(button)
-
-        expect(
-            screen.getByText("The searched domain is: www.lifetastesgreat.com")
-        ).toBeInTheDocument()
+    afterEach(() => {
+        jest.restoreAllMocks()
     })
+
+    const testCases = [
+        {
+            domainName: "www.tddrocks.com",
+            displayName: "TDD Rocks",
+            mockedResponse: { domain: "tddrocks.com", isPremium: true }
+        },
+        {
+            domainName: "www.lifetastesgreat.com",
+            displayName: "Life Tastes Great",
+            mockedResponse: { domain: "lifetastesgreat.com", isPremium: false }
+        }
+    ]
+
+    it.each(testCases)(
+        "should display base domain check '$displayName' when specified by user",
+        async ({ domainName, displayName, mockedResponse }) => {
+            fetchMock.mockResponseOnce(JSON.stringify(mockedResponse))
+
+            render(<DomainAvailabilityChecker />)
+
+            enterDomainNameAndClickCheckButton(domainName)
+
+            await waitFor(() => {
+                expect(
+                    screen.getByText(`The searched domain is: ${domainName}`)
+                ).toBeInTheDocument()
+            })
+
+            await waitFor(() => {
+                const premiumText = mockedResponse.isPremium
+                    ? "Premium domain"
+                    : "Standard domain" // Adjust this line according to your component logic
+                expect(screen.getByText(premiumText)).toBeInTheDocument()
+            })
+
+            expect(global.fetch).toHaveBeenCalledWith(
+                expect.stringContaining(`/check?domain=${domainName}`)
+            )
+        }
+    )
 })
+
+/* Helper fns */
+
+const enterDomainNameAndClickCheckButton = (domain: string) => {
+    const inputField = screen.getByRole("textbox")
+
+    fireEvent.change(inputField, { target: { value: domain } })
+
+    const button = screen.getByRole("button")
+
+    fireEvent.click(button)
+}

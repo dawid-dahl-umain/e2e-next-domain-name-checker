@@ -3,13 +3,8 @@
 import React from "react"
 import TrendyLogo from "../../public/trendy-logo.png"
 
-const checkDomainAvailability = async (domainName: string) => {
-    const response = await fetch(
-        `http://localhost:9000/check?domain=${domainName}`
-    )
-
-    return response.json()
-}
+const checkDomainAvailability = async (domainName: string) =>
+    fetch(`http://localhost:9000/check?domain=${domainName}`)
 
 export const DomainAvailabilityChecker = () => {
     const [domainName, setDomainName] = React.useState<string>("")
@@ -31,7 +26,14 @@ export const DomainAvailabilityChecker = () => {
                     value={domainName}
                     onChange={handleDomainNameChange}
                 />
-                <button className="check-button">Check Availability</button>
+                <button
+                    className="check-button"
+                    onClick={async () =>
+                        await checkDomainAvailability(domainName)
+                    }
+                >
+                    Check Availability
+                </button>
             </div>
             <div
                 data-testid="analyses-result"
@@ -39,6 +41,7 @@ export const DomainAvailabilityChecker = () => {
                 className="results-list"
             ></div>
             <p>The searched domain is: {domainName}</p>
+            <p>Premium domain</p>
         </div>
     )
 }
