@@ -35,19 +35,20 @@ test.describe("/", () => {
 
             // Then I see the availability of the domain
             // Access the results list and check the content of each list item
+            const h3Result = page.locator("#analyses-result h3")
             const results = page.locator("#analyses-result li")
 
             // Check that the first item displays the domain name checked
-            await expect(results.nth(0)).toHaveText(
+            await expect(h3Result).toHaveText(
                 "The searched domain is: www.tddrocks.com",
                 { timeout: 5000 } // Optionally specify timeout for waiting for the text
             )
 
             // Check that the second item identifies the domain as a premium domain
-            await expect(results.nth(1)).toHaveText("Premium domain")
+            await expect(results.nth(0)).toHaveText("Premium domain")
 
             // Check that the third item offers a discount for the domain
-            await expect(results.nth(2)).toHaveText("50% OFF")
+            await expect(results.nth(1)).toHaveText("50% OFF")
         })
     })
 

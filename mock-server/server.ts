@@ -19,16 +19,19 @@ try {
     process.exit(1)
 }
 
-export interface CheckItem {
+interface CheckItemWithId extends CheckItem {
     id: number
-    isAvailable: boolean
-    domain: string
+}
+
+export interface CheckItem {
+    isAvailable?: boolean
+    domain?: string
     isPremium?: boolean
     discountCode?: "DISCOUNT_20" | "DISCOUNT_50" | "RENEWAL_DISCOUNT_90"
 }
 
 interface DB {
-    check: CheckItem[]
+    check: CheckItemWithId[]
 }
 
 // Endpoint to check domain availability

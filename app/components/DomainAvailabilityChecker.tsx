@@ -2,16 +2,49 @@
 
 import React from "react"
 import TrendyLogo from "../../public/trendy-logo.png"
+import { CheckItem } from "../../mock-server/server"
+import DomainCheckResults from "./DomainCheckResults"
 
 const checkDomainAvailability = async (domainName: string) =>
     fetch(`http://localhost:9000/check?domain=${domainName}`)
 
 export const DomainAvailabilityChecker = () => {
-    const [domainName, setDomainName] = React.useState<string>("")
+    const [hasRequestFailed, setHasRequestFailed] =
+        React.useState<boolean>(false)
+    const [domainCheck, setDomainCheck] = React.useState<CheckItem | null>(null)
+    const [domainNameInput, setDomainNameInput] = React.useState<string>("")
 
     const handleDomainNameChange = (
         event: React.ChangeEvent<HTMLInputElement>
-    ) => setDomainName(event.target.value)
+    ) => {
+        setDomainNameInput(event.target.value)
+        setDomainCheck(null)
+    }
+
+    const handleCheckDomain = async () => {
+        try {
+            const domainResponse = await checkDomainAvailability(
+                domainNameInput
+            )
+
+            if (domainResponse.ok) {
+                const domainData = await domainResponse.json()
+                setDomainCheck(domainData)
+            } else {
+                setDomainCheck({})
+            }
+        } catch (error) {
+            console.error("Error fetching data: ", error)
+            setHasRequestFailed(true)
+        }
+    }
+
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === "Enter") {
+            event.preventDefault()
+            handleCheckDomain()
+        }
+    }
 
     return (
         <div data-testid="main" className="domain-availability-container">
@@ -23,15 +56,11 @@ export const DomainAvailabilityChecker = () => {
                     type="text"
                     id="domainNameInput"
                     className="domain-input"
-                    value={domainName}
+                    value={domainNameInput}
                     onChange={handleDomainNameChange}
+                    onKeyDown={handleKeyDown}
                 />
-                <button
-                    className="check-button"
-                    onClick={async () =>
-                        await checkDomainAvailability(domainName)
-                    }
-                >
+                <button className="check-button" onClick={handleCheckDomain}>
                     Check Availability
                 </button>
             </div>
@@ -39,9 +68,16 @@ export const DomainAvailabilityChecker = () => {
                 data-testid="analyses-result"
                 id="analyses-result"
                 className="results-list"
-            ></div>
-            <p>The searched domain is: {domainName}</p>
-            <p>Premium domain</p>
+            >
+                <h3>
+                    {domainNameInput &&
+                        `The searched domain is: ${domainNameInput}`}
+                </h3>
+                <DomainCheckResults
+                    domainCheck={domainCheck}
+                    hasRequestFailed={hasRequestFailed}
+                />
+            </div>
         </div>
     )
 }
